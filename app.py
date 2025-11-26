@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, jsonify
 from dotenv import load_dotenv
 import requests
 import json
@@ -18,8 +18,53 @@ app = Flask(__name__)
 
 @app.route('/health')
 def health():
-    return "OK" , 200
+    return jsonify({"status": "OK"}), 200
 
+@app.route('/stats')
+def stats():
+    try:
+        data = get_signals()
+        write_signals_to_jsonl(data)
+        
+        agrregated_stats = get_statistics()
+        print("Done!")
+        return jsonify(agrregated_stats), 200
+    except Exception as e:
+        print(f"Error fetching signals: {e}")
+        return jsonify(e), 400
+
+def get_statistics():
+    """
+    Reads signals.jsonl and returns aggregated statistics.
+    """
+    try:    
+        signals = read_signals(SIGNAL_FILE)
+        return aggregate_events(signals)
+    except Exception as e:
+        print(f"Error aggregating statistics: {e}")
+        raise
+
+def aggregate_events(events):
+    print("Aggregating signals...")
+    stats = {
+            "total_events": 0,
+            "by_source": {},
+            "by_protocol": {}
+    }
+    
+    for event in events:    
+        # Count total events
+        stats["total_events"] += 1
+                
+        # Count by source
+        source = event.get("source", "unknown")
+        stats["by_source"][source] = stats["by_source"].get(source, 0) + 1
+                
+        # Count by protocol
+        protocol = event.get("protocol", "unknown")
+        stats["by_protocol"][protocol] = stats["by_protocol"].get(protocol, 0) + 1
+    
+    return stats
 def get_signals():
     try:
         print("Getting signals...")
@@ -27,8 +72,22 @@ def get_signals():
         return response.json()
     except Exception as e:
         print(f"Error fetching signals: {e}")
+        raise
 
 
+def read_signals(filename=SIGNAL_FILE):
+    result = []
+    try:
+        print("Reading signals...")
+        with open(filename, 'r') as f:
+            for line in f:
+                result.append(json.loads(line.strip()))
+        return result
+    except FileNotFoundError:
+        print(f"File not found: {SIGNAL_FILE}")
+        return {"total_events": 0, "by_source": {}, "by_protocol": {}}
+    
+    
 def write_signals_to_jsonl(data, filename=SIGNAL_FILE):
     """
     Writes array of arrays to JSONL file.
@@ -54,6 +113,7 @@ def write_signals_to_jsonl(data, filename=SIGNAL_FILE):
                 
     except Exception as e:
         print(f"Error writing to file: {e}")
+        raise
         
 def map_record(record):
     mapped = {}
