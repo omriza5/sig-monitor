@@ -143,15 +143,5 @@ def extract_protocol_part(url):
     return parsed.scheme
 
 
-
-def main():
-    try:
-        data = get_signals()
-        write_signals_to_jsonl(data)
-    except Exception as e:
-        print(f"Something went wrong: {e}")
-
-# main()
-
 if __name__ == '__main__':
     app.run(debug=True, port=8000)
