@@ -14,6 +14,12 @@ DEFAULT_MAX_RECORDS = os.getenv("MAX_RECORDS", 100)
 
 INTELLIGENCE_ADJACENT_API = f"https://web.archive.org/cdx/search/cdx?url={DEFAULT_INTELLIGENCE_ADJACENT}/*&output=json&limit=10"
 
+STATUS_CODES ={
+    "200" : 'ok',
+    "301": 'moved permanently',
+    "-1" : "-"
+}
+
 app = Flask(__name__)
 
 @app.route('/health')
@@ -68,7 +74,9 @@ def map_record(record):
     if 'length' in record:
         mapped['bytes'] = record['length']
     if 'statuscode' in record:
-        pass
+        status_code = record['statuscode']
+        status = STATUS_CODES[status_code] if STATUS_CODES[status_code] else STATUS_CODE['-1']
+        mapped['status'] = status
     
     return mapped
         
