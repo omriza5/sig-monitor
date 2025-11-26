@@ -1,10 +1,10 @@
-{"timestamp": "2006-09-03T21:12:27", "protocol": "http", "source": "www.bellingcat.com", "bytes": "2457", "status": "ok"}
-{"timestamp": "2006-09-03T21:34:47", "protocol": "http", "source": "www.bellingcat.com", "bytes": "2460", "status": "ok"}
+{"timestamp": "2006-09-03T21:12:27", "protocol": "http", "source": "bellingcat.com", "bytes": "2457", "status": "ok"}
+{"timestamp": "2006-09-03T21:34:47", "protocol": "http", "source": "bellingcat.com", "bytes": "2460", "status": "ok"}
 {"timestamp": "2014-05-17T01:11:59", "protocol": "http", "source": "bellingcat.com", "bytes": "607", "status": "ok"}
-{"timestamp": "2014-07-20T22:18:54", "protocol": "http", "source": "bellingcat.com", "bytes": "305", "status": "moved permanently"}
+{"timestamp": "2014-07-20T22:18:54", "protocol": "http", "source": "bellingcat.com", "bytes": "305", "status": "error"}
 {"timestamp": "2014-07-24T20:13:18", "protocol": "https", "source": "bellingcat.com", "bytes": "1593", "status": "ok"}
 {"timestamp": "2014-08-10T05:23:26", "protocol": "https", "source": "bellingcat.com", "bytes": "1629", "status": "ok"}
-{"timestamp": "2014-08-24T13:55:18", "protocol": "http", "source": "bellingcat.com", "bytes": "479", "status": "moved permanently"}
+{"timestamp": "2014-08-24T13:55:18", "protocol": "http", "source": "bellingcat.com", "bytes": "479", "status": "error"}
 {"timestamp": "2014-08-24T13:55:22", "protocol": "https", "source": "bellingcat.com", "bytes": "9164", "status": "ok"}
 {"timestamp": "2014-08-24T22:08:24", "protocol": "https", "source": "bellingcat.com", "bytes": "9032", "status": "ok"}
-{"timestamp": "2014-08-27T22:09:47", "protocol": "http", "source": "bellingcat.com", "bytes": "725", "status": "moved permanently"}
+{"timestamp": "2014-08-27T22:09:47", "protocol": "http", "source": "bellingcat.com", "bytes": "725", "status": "error"}

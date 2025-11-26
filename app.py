@@ -8,17 +8,11 @@ from urllib.parse import urlparse
 
 load_dotenv() 
 
-DEFAULT_INTELLIGENCE_ADJACENT = os.getenv("TARGET_DOMAIN", "bellingcat.com")
-DEFAULT_SIGNAL_FILE = os.getenv("SIGNAL_FILE", "data/signals.jsonl")
-DEFAULT_MAX_RECORDS = os.getenv("MAX_RECORDS", 100)
+INTELLIGENCE_ADJACENT = os.getenv("TARGET_DOMAIN", "bellingcat.com")
+SIGNAL_FILE = os.getenv("SIGNAL_FILE", "data/signals.jsonl")
+MAX_RECORDS = os.getenv("MAX_RECORDS", 100)
 
-INTELLIGENCE_ADJACENT_API = f"https://web.archive.org/cdx/search/cdx?url={DEFAULT_INTELLIGENCE_ADJACENT}/*&output=json&limit=10"
-
-STATUS_CODES ={
-    "200" : 'ok',
-    "301": 'moved permanently',
-    "-1" : "-"
-}
+INTELLIGENCE_ADJACENT_API = f"https://web.archive.org/cdx/search/cdx?url={INTELLIGENCE_ADJACENT}/*&output=json&limit=10"
 
 app = Flask(__name__)
 
@@ -35,7 +29,7 @@ def get_signals():
         print(f"Error fetching signals: {e}")
 
 
-def write_signals_to_jsonl(data, filename=DEFAULT_SIGNAL_FILE):
+def write_signals_to_jsonl(data, filename=SIGNAL_FILE):
     """
     Writes array of arrays to JSONL file.
     First row is treated as column headers.
@@ -68,29 +62,25 @@ def map_record(record):
         dt = datetime.strptime(timestamp, '%Y%m%d%H%M%S')
         mapped['timestamp'] = dt.isoformat()
     if 'original' in record:
-        protocol, source = extract_url_parts(record['original'])
+        protocol = extract_protocol_part(record['original'])
         mapped['protocol'] = protocol
-        mapped['source'] = source
+        mapped['source'] = INTELLIGENCE_ADJACENT
     if 'length' in record:
-        mapped['bytes'] = record['length']
+        mapped['bytes'] = record['length'] or 0
     if 'statuscode' in record:
         status_code = record['statuscode']
-        status = STATUS_CODES[status_code] if STATUS_CODES[status_code] else STATUS_CODE['-1']
-        mapped['status'] = status
+        mapped['status'] = 'ok' if status_code.startswith('2') else 'error'
     
     return mapped
         
-def extract_url_parts(url):
+def extract_protocol_part(url):
     """
     Extracts protocol and domain from URL.
     Example: 'http://www.bellingcat.com:80/' 
-    Returns: ('http', 'www.bellingcat.com')
+    Returns: 'http'
     """
     parsed = urlparse(url)
-    protocol = parsed.scheme
-    domain = parsed.hostname  # or parsed.netloc for 'www.bellingcat.com:80'
-    
-    return protocol, domain
+    return parsed.scheme
 
 
 
