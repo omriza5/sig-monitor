@@ -9,7 +9,7 @@ case $COMMAND in
     ;;
   
   collect)
-    python3 collect_signals.py
+    python3 scripts/collect_signals.py
     ;;
   
   run-local)
