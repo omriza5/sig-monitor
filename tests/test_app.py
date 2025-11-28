@@ -1,5 +1,7 @@
 import pytest
-from app import app, aggregate_events
+from app import app
+from scripts.collect_signals import aggregate_events
+
 
 class TestApp:
     @pytest.fixture(autouse=True)
