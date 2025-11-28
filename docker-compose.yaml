@@ -1,0 +1,14 @@
+version: "3.8"
+
+services:
+  sig-monitor:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - SIGNAL_FILE=data/signals.jsonl
+      - APP_PORT=8000
+      - TARGET_DOMAIN=bellingcat.com
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped

@@ -144,4 +144,4 @@ def extract_protocol_part(url):
 
 
 if __name__ == '__main__':
-    app.run(debug=True, port=APP_PORT)
+    app.run(debug=True, port=int(APP_PORT), host='0.0.0.0')
