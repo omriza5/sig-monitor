@@ -66,6 +66,7 @@ def aggregate_events(events):
         stats["by_protocol"][protocol] = stats["by_protocol"].get(protocol, 0) + 1
     
     return stats
+
 def get_signals():
     try:
         print("Getting signals...")
@@ -74,7 +75,6 @@ def get_signals():
     except Exception as e:
         print(f"Error fetching signals: {e}")
         raise
-
 
 def read_signals(filename=SIGNAL_FILE):
     result = []
@@ -87,8 +87,7 @@ def read_signals(filename=SIGNAL_FILE):
     except FileNotFoundError:
         print(f"File not found: {SIGNAL_FILE}")
         return {"total_events": 0, "by_source": {}, "by_protocol": {}}
-    
-    
+     
 def write_signals_to_jsonl(data, filename=SIGNAL_FILE):
     """
     Writes array of arrays to JSONL file.
